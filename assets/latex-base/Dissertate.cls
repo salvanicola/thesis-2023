@@ -11,7 +11,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{Dissertate}[2014/03/25 v2.0 Dissertate Class]
-\LoadClass[12pt, oneside, letterpaper]{book}
+\LoadClass[12pt, twoside, openright, a4paper]{book}
 
 %
 % Options
@@ -21,7 +21,7 @@
 % Line spacing: dsingle/ddouble
 %   Whether to use single- or doublespacing.
 \newtoggle{DissertateSingleSpace}
-\togglefalse{DissertateSingleSpace}
+\toggletrue{DissertateSingleSpace}
 \DeclareOption{dsingle}{
     \toggletrue{DissertateSingleSpace}
     \ClassWarning{Dissertate}{Single-spaced mode on.}
@@ -62,9 +62,9 @@
     {\endoldenumerate\end{spacing}}
 
 % Text layout.
-\RequirePackage[width=5.75in, letterpaper]{geometry}
+\RequirePackage[outer=1in, inner=1.55in, twoside, a4paper]{geometry}
 \usepackage{ragged2e}
-\RaggedRight
+%\RaggedRight
 \RequirePackage{graphicx}
 \usepackage{fixltx2e}
 \parindent 12pt
@@ -79,8 +79,8 @@
 \RequirePackage{url}
 \RequirePackage{amssymb}
 \RequirePackage{mathspec}
-\setmathsfont(Digits,Latin,Greek)[Numbers={Proportional}]{EB Garamond}
-\setmathrm{EB Garamond}
+%\setmathsfont(Digits,Latin,Greek)[Numbers={Proportional}]{EB Garamond}
+%\setmathrm{EB Garamond}
 \AtBeginEnvironment{tabular}{\addfontfeature{RawFeature=+tnum}}
 \widowpenalty=300
 \clubpenalty=300
@@ -98,6 +98,37 @@
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \RequirePackage{microtype}
 
+% Tikz
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest} 
+\pgfplotsset{plot coordinates/math parser=false} 
+\newlength\fheight
+\newlength\fwidth
+\usepackage{booktabs}
+\usepackage{multirow}
+%\usepackage{multicolumn}
+\usepackage{subcaption}
+\usetikzlibrary{patterns,decorations.pathreplacing,backgrounds,calc}
+\usepackage{afterpage}
+\usepackage{tabulary}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\renewcommand\algorithmicthen{}
+\renewcommand\algorithmicdo{}
+\@addtoreset{algorithm}{chapter}% algorithm counter resets every chapter
+\usepackage{lscape}
+\renewcommand{\thealgorithm}{\thechapter.\arabic{algorithm}}% Algorithm # is <chapter>.<algorithm>
+
+
+% Abbreviations
+\newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}\ \dotfill}}
+\newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
+
 
 % Headings and headers.
 \RequirePackage{fancyhdr}
@@ -107,7 +138,7 @@
 \RequirePackage{titling}
 
 % Front matter.
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
 \usepackage[titles]{tocloft}
 \usepackage[titletoc]{appendix}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
@@ -120,11 +151,13 @@
 
 % References.
 \renewcommand\bibname{References}
-\RequirePackage[super,comma,numbers]{natbib}
+%\RequirePackage[super,comma,numbers]{natbib}
+\RequirePackage[comma,numbers]{natbib}
 \renewcommand{\bibnumfmt}[1]{[#1]}
 \RequirePackage[palatino]{quotchap}
 \renewcommand*{\chapterheadstartvskip}{\vspace*{-0.5\baselineskip}}
 \renewcommand*{\chapterheadendvskip}{\vspace{1.3\baselineskip}}
+\bibliographystyle{IEEEtran}
 
 % An environment for paragraph-style section.
 \providecommand\newthought[1]{%
@@ -157,7 +190,9 @@
 
 % Some definitions.
 \def\advisor#1{\gdef\@advisor{#1}}
+\def\mastername#1{\gdef\@mastername{#1}}
 \def\coadvisorOne#1{\gdef\@coadvisorOne{#1}}
+\def\coadvisorOneUniversity#1{\gdef\@coadvisorOneUniversity{#1}}
 \def\coadvisorTwo#1{\gdef\@coadvisorTwo{#1}}
 \def\committeeInternal#1{\gdef\@committeeInternal{#1}}
 \def\committeeInternalOne#1{\gdef\@committeeInternalOne{#1}}

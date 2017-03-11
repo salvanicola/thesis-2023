@@ -1,12 +1,12 @@
 % School name and location
-\university{New York University}
-\universitycity{New York}
-\universitystate{New York}
+\university{University of Padova}
+\universitycity{Padova}
+\universitystate{Italy}
 
 % School color found from university's graphic identity site:
 % http://www.nyu.edu/employees/resources-and-services/media-and-communications/styleguide.html
-\definecolor{SchoolColor}{rgb}{0.3412, 0.0235, 0.5490} % purple
-\definecolor{chaptergrey}{rgb}{0.2600, 0.0200, 0.4600} % dialed back a little
+\definecolor{SchoolColor}{rgb}{0.71, 0, 0.106} % UNIPD red
+\definecolor{chaptergrey}{rgb}{0.61, 0, 0.09} % dialed back a little
 \definecolor{midgrey}{rgb}{0.4, 0.4, 0.4}
 
 \hypersetup{
@@ -17,65 +17,93 @@
     urlcolor=SchoolColor,
 }
 
-% Formatting guidelines found in:
-% http://gsas.nyu.edu/docs/IO/4474/formattingguide.pdf
 
 \renewcommand{\frontmatter}{
 	\pagenumbering{roman}
 	\input{frontmatter/personalize}
 	\maketitle
-	\copyrightpage
 	\frontispiece
 	\dedicationpage
-	\acknowledgments
-	\preface
 	\abstractpage
+	\sommario
 	\tableofcontents
+	\phantomsection
+	\clearpage
 
 	% figure listing - required if you have any figures
+	\addcontentsline{toc}{chapter}{List of figures}
 	\listoffigures
 	\phantomsection
-	\addcontentsline{toc}{chapter}{List of figures}
+	\cleardoublepage
 
 	% table listing - required if you have any tables
+	\addcontentsline{toc}{chapter}{List of tables}
 	\listoftables
 	\phantomsection
-	\addcontentsline{toc}{chapter}{List of tables}
+	\cleardoublepage
 
-	% appendix listing - required only if you have two or more appendices
-	% \newpage
-	% \thispagestyle{empty}
-	% \phantomsection
-	% \addcontentsline{toc}{chapter}{List of appendices}
-	% \chapter*{List of appendices}
-	% \contentsline {chapter}{Appendix A}{\pageref{AppendixA}}{}
+	% \acronyms
 
-	\newpage
+	\cleardoublepage
 	\setcounter{page}{1}
 	\pagenumbering{arabic}
 }
 
+\newcommand{\cover}{
+	\pagenumbering{roman}
+	\input{frontmatter/personalize}
+	\makecover
+}
+
 \renewcommand{\maketitle}{
 	\thispagestyle{empty}
-	\vspace*{\fill}
-	\vspace{100pt}
+	\setcounter{page}{1}
 	\begin{center}
-	\Huge \textcolor{midgrey}{\thetitle} \normalsize \\
+	\vbox to0pt{\vbox to\textheight{\vfill \includegraphics[width=11.5cm]{resources/unipd-light} \vfill}\vss}
+	%\vspace*{\fill}
+	\begin{figure}
+	\centering
+  		\includegraphics[height=2.5cm]{resources/unipd-bn}
+	\end{figure}
+
+	\setstretch{1.5}
+
+	\scshape{\Large{\bfseries{Università degli Studi di Padova}}} \\
+	\line(1, 0){400} \\
+	\scshape{\large{Department of Something}} \\
+
+	\vspace{5pt}
+	\small{\textit{Master Thesis in}}
+	\@mastername
+
+	\setstretch{2.5}
+
+	\vspace{30pt}
+	\scshape{\LARGE{\bfseries{\textcolor{SchoolColor}{\thetitle}}}} \normalsize \\
 	\vspace{25pt}
-	by \\
 	\vspace{15pt}
-	\theauthor\\
-	\vspace{135pt}
-	\textsc{a dissertation submitted in partial fulfillment\\
-	of the requirements for the degree of \\
-	\vspace{8pt}
-	\@degree \\
-	\@department \\
-	\@university \\
-	\vspace{10pt}
-	\@degreemonth, \@degreeyear}
+	
+	\setstretch{1.2}
+
+	\vfill
+	\begin{normalsize}
+	\begin{flushleft}
+	  \textit{Supervisor} \hfill \textit{Master Candidate}\\
+	  \vspace{1pt}
+	  \@advisor \hfill \@author\\
+	  Università di Padova \\
+	  \vspace{6pt}
+	  \textit{Co-supervisor} \\
+	  \@coadvisorOne \\
+	  \@coadvisorOneUniversity
+	  \vspace{10pt}
+	\end{flushleft}
+	\end{normalsize}
+	
 	\end{center}
 	\vspace*{\fill}
+	\singlespacing
+	\cleardoublepage
 }
 
 \newcommand{\copyrightpage}{
@@ -95,41 +123,44 @@
 	\thispagestyle{empty}
 	\vspace*{\fill}
 	\begin{center}
-    \includegraphics[width=45pt]{resources/NYUlogo.eps}
 	\end{center}
 	\vspace*{\fill}
 }
 
 \newcommand{\dedicationpage}{
 	\phantomsection
-	\addcontentsline{toc}{chapter}{Dedication}
-	\newpage
-	\setcounter{page}{4}
+	\setcounter{page}{3}
 	\vspace*{\fill}
 	\scshape \noindent \input{frontmatter/dedication}
 	\vspace*{\fill}
-	\newpage
+	\cleardoublepage
 	\rm
 }
 
 \newcommand{\acknowledgments}{
 	\phantomsection
-	\addcontentsline{toc}{chapter}{Acknowledgments}
 	\chapter*{Acknowledgments}
 	\noindent
 	\input{frontmatter/thanks}
 	\vspace*{\fill} \newpage
 }
 
-\newcommand{\preface}{
+\newcommand{\sommario}{
 	\phantomsection
-	\addcontentsline{toc}{chapter}{Preface}
-	\chapter*{Preface}
+	\chapter*{Sommario}
 	\input{frontmatter/preface}
+}
+
+\newcommand{\acronyms}{
+	\phantomsection
+	\addcontentsline{toc}{chapter}{Listing of acronyms}
+	\chapter*{Listing of acronyms}
+	\input{frontmatter/abbr.tex}
 }
 
 \newcommand{\abstractpage}{
 	\phantomsection
+	\setcounter{page}{5}
 	\addcontentsline{toc}{chapter}{Abstract}
 	\chapter*{Abstract}
 	\input{frontmatter/abstract}

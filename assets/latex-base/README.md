@@ -1,4 +1,4 @@
-# Dissertate
+# LaTeX template for UNIPD Thesis
 
 ## Getting started
 1. Install LaTeX. For Mac OS X, we recommend MacTex (http://tug.org/mactex/); for Windows, MiKTeX (http://miktex.org/); and for Ubuntu, Tex Live (`sudo apt-get install texlive-full`)
@@ -8,5 +8,11 @@
 
 ## FAQ
 
-### How do I make the text justified instead of ragged right?
-Remove or comment out the line `\RaggedRight` from the .cls file.
+### How do I modify the template?
+Edit the Dissertate.cls file
+
+### How do I modify the cover?
+Edit the \maketitle command in the Dissertate.cls file
+
+## Credits
+Fork of https://github.com/suchow/Dissertate
