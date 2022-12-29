@@ -214,3 +214,185 @@
 \def\pdTwoName#1{\gdef\@pdTwoName{#1}}
 \def\pdTwoSchool#1{\gdef\@pdTwoSchool{#1}}
 \def\pdTwoYear#1{\gdef\@pdTwoYear{#1}}
+% School name and location
+\university{University of Padova}
+\universitycity{Padova}
+\universitystate{Italy}
+
+% School color found from university's graphic identity site:
+% http://www.nyu.edu/employees/resources-and-services/media-and-communications/styleguide.html
+\definecolor{SchoolColor}{rgb}{0.71, 0, 0.106} % UNIPD red
+\definecolor{chaptergrey}{rgb}{0.61, 0, 0.09} % dialed back a little
+\definecolor{midgrey}{rgb}{0.4, 0.4, 0.4}
+
+\hypersetup{
+    colorlinks,
+    citecolor=SchoolColor,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=SchoolColor,
+}
+
+
+\renewcommand{\frontmatter}{
+	\pagenumbering{roman}
+	\input{frontmatter/personalize}
+	\maketitle
+	\frontispiece
+	\dedicationpage
+	\abstractpage
+	\sommario
+	\tableofcontents
+	\phantomsection
+	\clearpage
+
+	% figure listing - required if you have any figures
+	\addcontentsline{toc}{chapter}{List of figures}
+	\listoffigures
+	\phantomsection
+	\cleardoublepage
+
+	% table listing - required if you have any tables
+	\addcontentsline{toc}{chapter}{List of tables}
+	\listoftables
+	\phantomsection
+	\cleardoublepage
+
+	% \acronyms
+
+	\cleardoublepage
+	\setcounter{page}{1}
+	\pagenumbering{arabic}
+}
+
+\newcommand{\cover}{
+	\pagenumbering{roman}
+	\input{frontmatter/personalize}
+	\makecover
+}
+
+\renewcommand{\maketitle}{
+	\thispagestyle{empty}
+	\setcounter{page}{1}
+	\begin{center}
+	\vbox to0pt{\vbox to\textheight{\vfill \includegraphics[width=11.5cm]{resources/unipd-light} \vfill}\vss}
+	%\vspace*{\fill}
+	\begin{figure}
+	\centering
+  		\includegraphics[height=2.5cm]{resources/unipd-bn}
+	\end{figure}
+
+	\setstretch{1.5}
+
+	\scshape{\Large{\bfseries{Università degli Studi di Padova}}} \\
+	\line(1, 0){400} \\
+	\scshape{\large{Department of Something}} \\
+
+	\vspace{5pt}
+	\small{\textit{Master Thesis in}}
+	\@mastername
+
+	\setstretch{2.5}
+
+	\vspace{30pt}
+	\scshape{\LARGE{\bfseries{\textcolor{SchoolColor}{\thetitle}}}} \normalsize \\
+	\vspace{25pt}
+	\vspace{15pt}
+	
+	\setstretch{1.2}
+
+	\vfill
+	\begin{normalsize}
+	\begin{flushleft}
+	  \textit{Supervisor} \hfill \textit{Master Candidate}\\
+	  \vspace{1pt}
+	  \@advisor \hfill \@author\\
+	  Università di Padova \\
+	  \vspace{6pt}
+	  \textit{Co-supervisor} \\
+	  \@coadvisorOne \\
+	  \@coadvisorOneUniversity
+	  \vspace{10pt}
+	\end{flushleft}
+	\end{normalsize}
+	
+	\end{center}
+	\vspace*{\fill}
+	\singlespacing
+	\cleardoublepage
+}
+
+\newcommand{\copyrightpage}{
+	\newpage
+	\thispagestyle{empty}
+	\vspace*{25pt}
+	\begin{center}
+	\scshape \noindent \small \copyright \  \small  \theauthor \\
+	all rights reserved, \@degreeyear
+	\end{center}
+	\newpage
+	\rm
+}
+
+\newcommand{\frontispiece}{
+	\newpage
+	\thispagestyle{empty}
+	\vspace*{\fill}
+	\begin{center}
+	\end{center}
+	\vspace*{\fill}
+}
+
+\newcommand{\dedicationpage}{
+	\phantomsection
+	\setcounter{page}{3}
+	\vspace*{\fill}
+	\scshape \noindent \input{frontmatter/dedication}
+	\vspace*{\fill}
+	\cleardoublepage
+	\rm
+}
+
+\newcommand{\acknowledgments}{
+	\phantomsection
+	\chapter*{Acknowledgments}
+	\noindent
+	\input{frontmatter/thanks}
+	\vspace*{\fill} \newpage
+}
+
+\newcommand{\sommario}{
+	\phantomsection
+	\chapter*{Sommario}
+	\input{frontmatter/preface}
+}
+
+\newcommand{\acronyms}{
+	\phantomsection
+	\addcontentsline{toc}{chapter}{Listing of acronyms}
+	\chapter*{Listing of acronyms}
+	\input{frontmatter/abbr.tex}
+}
+
+\newcommand{\abstractpage}{
+	\phantomsection
+	\setcounter{page}{5}
+	\addcontentsline{toc}{chapter}{Abstract}
+	\chapter*{Abstract}
+	\input{frontmatter/abstract}
+}
+
+
+\renewcommand{\backmatter}{
+    \begin{appendices}
+        \include{chapters/appendixA}
+    \end{appendices}
+    \input{endmatter/personalize}
+    \clearpage
+    \bibliography{references}
+    \addcontentsline{toc}{chapter}{References}
+    \bibliographystyle{apalike2}
+    \include{endmatter/colophon}
+}
+
+

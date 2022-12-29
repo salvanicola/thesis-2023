@@ -1,0 +1,14 @@
+{
+    "emeraldwalk.runonsave": {
+        "autoClearConsole": false,
+        "commands": [
+            {
+                "match": "*.tex",
+                "isAsync": true,
+                "cmd": "./${workspaceFolder}/scripts/build"
+            },
+        ]
+    }
+
+    
+}
