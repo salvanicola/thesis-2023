@@ -1,0 +1,59 @@
+\chapter{Evaluation}
+\label{cap:five}
+\newthought{The analysis and design of the application} occupied a lot of time, as such the final Kerbero implementation was limited to the essential requirements. However, the system was developed to scale, therefore, the project is open to future improvements. 
+\\ In this chapter, I will perform an evaluation of the results and give my opinion on the choices made during the design of the application.
+
+\section{Requirements satisfied}
+During the analysis, we identified few mandatory, but essential requirements. The discriminating factor was the requirements that classify essential and improving features. The following are the ones which were actually implemented in the system. The properties are all verified by integration and end-to-end tests.
+
+\paragraph{User authentication}
+The user authentication is the basic way to protect user data and provide identity for the system; as such, this was an essential requirement for the system. Kerbero provides the possibility to sign in, with a classic flow, with the possibility of filling a form with email and password, and the email confirmation. The login is simple as well; therefore, the user inserts email and password, while cookies grant the authentication state for the entire session duration.
+
+\paragraph{Key generation and management}
+Key generation was a priority in Kerbero's design and development. The virtual key was actually implemented in the system, as such it is possible to operate on the following CRUD operations (Create, Read, Update, Delete). Moreover, the opening and closing of a smart-lock by its identifier from an anonymous endpoint, which does not require authentication, are available. The latter operation requires a random password that is created with the key and sent when it is shared.
+
+\paragraph{Generic smart-lock management}
+The design of generic smart-locks was described in previous sections. The operations on smart-lock we managed to achieve with Kerbero are the display of all the smart-locks associated to a Kerbero user account, as such iterating on all the Provider account available. Moreover, a single smart-lock can be opened and closed remotely by an authenticated account.
+
+\paragraph{Nuki authentication integration}
+It is possible to perform all OAuth2 authentication for the Nuki REST API, giving Kerbero user access to the operations on the Nuki smart-locks through the provider account. The credentials are persistent, as such the user does need to perform the authentication once and Kerbero remains linked to the Nuki account unitl the user decides to remove the integration.
+
+\paragraph{Nuki smart-lock integration}
+The whole information, coming from the Nuki REST API, is filtered and adapted to Kerbero use cases. Moreover, Kerbero has a plugin that integrates the main operations (open and close) of the Nuki smart-lock devices. 
+ 
+\section{Requirements not satisfied}
+Some of the expected requirements that we aim to achieve were not implemented. The reasons are different, but it is reasonable to think that they will be implemented in the future.
+
+\paragraph{Integration with more than one provider}
+Integration of more than one smart-lock provider was a desirable requirement because it can verify the feasibility of a system that acts as a proxy interface for different REST APIs. A study of a new provider was started on the Kisi products. However, the lack of time and tools changes the priority of this particular requirement. 
+
+\paragraph{Integration with a Vacation Rental Management system}
+The idea of Kerbero starts from the analysis of how Vacation Rental Management systems, like \gls{Airbnb}, can better implement remote check-in. However, during the feasibility study, we identified some limitations on the integration of the \acrshort{api}s of the latter. In fact, all the platforms analyzed do not provide any public API to interface with. Access to the actual existing APIs of Airbnb and \gls{Booking}, is available only after an explicit request. We decided that this feature can be delayed after the development of a first version of the application in such a way that we can attach an example software to the integration request. 
+ 
+\section{Limitations, future works and improvements}
+On the current implementation we discover several limitations and defects that can be improved in future versions.
+\\ The first we highlighted is the still presence of coupling between the Kerbero and Nuki smart-lock. During the design, there was a focus on generalizing the model and the operation related to the smart-lock. However, there are still too many references from the Kerbero core operations to the Nuki plugin. This is provoked by a less generic authentication flow, which couples the Nuki credentials (access token and refresh token) to the user account directly. We are aware that in this part of the application, a different design pattern can be applied to reduce dependencies.
+\\ Another improvement can be made in error management, flowing from the Web API to the client. In fact, all the error management has been done manually by the developer, which is not always a good idea. As such, a better system handled by the framework is desirable, but the current one does not provide a process that fits our requirements. 
+\\ Concerning the security and authentication, there is a limitation of the cookies client authentication with the OAuth2 one server-side. In fact, the OAuth2 flow forces the cookie policy to be \textit{Lax}, which means that the authentication session is valid for all domains reached by navigation from the main (which is the Kerbero client domain). As such, this exposes Kerbero to a security vulnerability. However, it is possible to create an ad hoc cookie with claims, which is lax and can only be used to perform OAuth2 authentication. The other cookie can be set as \textit{Strict} to fill the security gap. 
+ 
+% \section{Technologies evaluation} ???
+
+\section{Workflow evaluation}
+Eventually, I want to express an opinion on the workflow adopted during the project. In particular, the one used by the company in which I collaborate during the development of the project. 
+\\ The steps, we might have followed in order to address the release of the code, follow this order:
+\begin{itemize}
+    \item the selection of an issue to solve from GitHub, preceded by the filtering using priority and affinity with others already in progress;
+    \item the coding of a solution for the previous issue;
+    \item the creation of a commit following the conventional rule;
+    \item if the commit closes a feature, the generation of a Pull Request;
+    \item finally, the reviewing and the merging of the code in the master branch.
+\end{itemize}
+The whole process is preceded by a weekly plan of work, through the use of milestones and the creation of the issues, based on the fixes and features to be done.
+\\ I, most of all, appreciate the review system. The creation of a Pull Request forces the developer to stop developing over the just produced code, and it allows others developers to check and comment on it. This brings about two clear advantages:
+\begin{itemize}
+    \item a constant reviewed code, as such a good level of code quality;
+    \item a positive knowledge transfer from developer to developer inside the team.
+\end{itemize}
+The latter grants continuous learning, both from the reviewer side, which can read the code of others, and from the reviewed one, which must adjust the code based on the comment received. In summary, this method is particularly useful for the knowledge-transfer process, even without a large documentation layer below.
+\\ This workflow can be adopted only in a continuous integration context, in which new features are constantly released in the main codebase, with the support of the automatic build and test system.
+\\ This concepts are important to me, because part of my experience was adapting to the company workflow and developing an infrastructure for my project which grants the previous assumptions.

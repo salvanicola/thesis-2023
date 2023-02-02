@@ -43,9 +43,22 @@
 % Block quote with compressed spacing
 \let\oldquote\quote
 \let\endoldquote\endquote
-\renewenvironment{quote}
-    {\begin{spacing}{\dcompressedspacing}\oldquote}
-    {\endoldquote\end{spacing}}
+\renewenvironment{quote}[2][]
+  {\if\relax\detokenize{#1}\relax
+     \def\quoteauthor{#2}%
+   \else
+     \def\quoteauthor{#2~---~#1}%
+   \fi
+   \oldquote}
+  {\par\nobreak\smallskip\hfill(\quoteauthor)%
+   \endoldquote\addvspace{\bigskipamount}}
+
+
+% \let\oldquote\quote
+% \let\endoldquote\endquote
+% \renewenvironment{quote}
+%     {\begin{spacing}{\dcompressedspacing}\oldquote}
+%     {\endoldquote\end{spacing}}
 
 % Itemize with compressed spacing
 \let\olditemize\itemize
@@ -65,12 +78,33 @@
 \RequirePackage[outer=1in, inner=1.55in, twoside, a4paper]{geometry}
 \usepackage{ragged2e}
 %\RaggedRight
+\raggedbottom
 \RequirePackage{graphicx}
-\usepackage{fixltx2e}
 \parindent 12pt
 \RequirePackage{lettrine}
 \RequirePackage{setspace}
 \RequirePackage{verbatim}
+
+% Glossary
+\usepackage[acronym]{glossaries}
+\setacronymstyle{long-short-desc}
+\renewcommand{\glossarysection}[2][]{}
+% \renewcommand{\glstextformat}[1]{#1$_{G}$}
+
+% code listing
+\usepackage{listings}
+\lstdefinestyle{curl}
+{
+    backgroundcolor=\color{white},
+    basicstyle=\scriptsize\color{black}\ttfamily,
+    morekeywords={c2c0981ffcab78eecd13c8b7ae9fdec4706045bdbb17b1ef06a335, b832f36641322c5c3357b7fe47 }
+}
+
+%PDF/A
+% \usepackage[a-1b]{pdfx}   % for PDF/A-1b
+% \title{Study and design of an application for door smart-locks and smart-keys}
+% \author{Nicola Salvadore}
+% \date{20/01/2022}
 
 % Fonts.
 \RequirePackage{color}
@@ -90,7 +124,7 @@
 \setmonofont[Scale=MatchLowercase]{Source Code Pro}
 \RequirePackage[labelfont={bf,sf,footnotesize,singlespacing},
                 textfont={sf,footnotesize,singlespacing},
-                justification={justified,RaggedRight},
+                justification=RaggedRight,
                 singlelinecheck=false,
                 margin=0pt,
                 figurewithin=chapter,
@@ -114,6 +148,39 @@
 \usepackage{tabulary}
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 
+% wrapfigure
+\usepackage{wrapfig}
+
+% image frame
+\usepackage[export]{adjustbox}
+
+% directory trees
+\usepackage{dirtree}
+    
+%% *****************************************************************
+\newlength{\upBranch} % shift up the text  lines <<<<
+\setlength{\upBranch}{0.7ex} % 
+
+\newlength{\tolineSpace} % blank space bellow text  lines  <<<
+\setlength{\tolineSpace}{1mm}% 
+
+\usepackage{xpatch} % needed <<<<<<<<
+\makeatletter
+
+\xpatchcmd{\dirtree} % root
+{\vbox{\@nameuse{DT@body@1}}}
+{\raisebox{-\tolineSpace}{\vbox{\@nameuse{DT@body@1}}}}
+{}{}    
+
+\xpatchcmd{\dirtree} % below space
+{\advance\dimen\z@ by-\@nameuse{DT@lastlevel@\the\DT@countiv}\relax}
+{\advance\dimen\z@ by-\tolineSpace \advance\dimen\z@ by-\@nameuse{DT@lastlevel@\the\DT@countiv}\relax}
+{}{}
+    
+\xpatchcmd{\dirtree}% shift up the text  lines
+{\kern\DT@sep\box\z@\endgraf}
+{\kern\DT@sep\raisebox{-\upBranch}{\box\z@}\endgraf}
+{}{} 
 
 % Pseudocode
 \usepackage{algorithm}
@@ -191,9 +258,6 @@
 % Some definitions.
 \def\advisor#1{\gdef\@advisor{#1}}
 \def\mastername#1{\gdef\@mastername{#1}}
-\def\coadvisorOne#1{\gdef\@coadvisorOne{#1}}
-\def\coadvisorOneUniversity#1{\gdef\@coadvisorOneUniversity{#1}}
-\def\coadvisorTwo#1{\gdef\@coadvisorTwo{#1}}
 \def\committeeInternal#1{\gdef\@committeeInternal{#1}}
 \def\committeeInternalOne#1{\gdef\@committeeInternalOne{#1}}
 \def\committeeInternalTwo#1{\gdef\@committeeInternalTwo{#1}}
@@ -241,7 +305,6 @@
 	\frontispiece
 	\dedicationpage
 	\abstractpage
-	\sommario
 	\tableofcontents
 	\phantomsection
 	\clearpage
@@ -309,9 +372,6 @@
 	  \@advisor \hfill \@author\\
 	  Università di Padova \\
 	  \vspace{6pt}
-	  \textit{Co-supervisor} \\
-	  \@coadvisorOne \\
-	  \@coadvisorOneUniversity
 	  \vspace{10pt}
 	\end{flushleft}
 	\end{normalsize}
@@ -361,17 +421,10 @@
 	\vspace*{\fill} \newpage
 }
 
-\newcommand{\sommario}{
+\newcommand{\glossaries}{
 	\phantomsection
-	\chapter*{Sommario}
-	\input{frontmatter/preface}
-}
-
-\newcommand{\acronyms}{
-	\phantomsection
-	\addcontentsline{toc}{chapter}{Listing of acronyms}
-	\chapter*{Listing of acronyms}
-	\input{frontmatter/abbr.tex}
+	\chapter*{Glossary}
+	\printglossaries
 }
 
 \newcommand{\abstractpage}{
@@ -395,4 +448,6 @@
     \include{endmatter/colophon}
 }
 
-
+\titleformat{\paragraph}[runin]
+{\normalfont\itshape}
+{\theparagraph.}{0.5em}{}[.]
